@@ -1,0 +1,18 @@
+[package]
+name = "front"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+yew = "0.19.3"
+reqwasm = "0.4.0"
+serde = "1.0.136"
+serde_derive = "1.0.136"
+serde_json = "1.0.78"
+wasm-bindgen-futures = "0.4"
+wasm-logger = "0.2.0"
+log = "0.4.14"
+wasm-bindgen = "0.2.79"
+web-sys = { version = "*", features = ["Window"] }

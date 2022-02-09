@@ -1,0 +1,21 @@
+.head {
+  text-align: center;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.todo {
+  display: flex;
+  /* flex-direction: column; */
+  border: 2px solid black;
+  padding: 5px auto;
+  padding-left: 5px;
+  text-align: center;
+}
+.todo div {
+  text-align: center;
+  padding: 10px auto;
+  margin: 10px;
+  border: 2px solid cyan;
+}
