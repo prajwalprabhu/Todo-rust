@@ -1,5 +1,2 @@
 [workspace]
-members=[
-  "front",
-  "back"
-]
+members = ["front", "back", "back-async"]

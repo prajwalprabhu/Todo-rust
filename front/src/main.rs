@@ -1,10 +1,3 @@
-use std::{
-    borrow::BorrowMut,
-    fmt::format,
-    sync::{Arc, Mutex},
-    time::Duration,
-};
-
 use reqwasm::http::Request;
 use serde_derive::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -23,7 +16,6 @@ extern "C" {
     fn alert(s: &str);
 }
 enum Msg {
-    AddOne,
     AddTodo(Vec<Todo>),
     Init,
     NewTodo,
@@ -32,7 +24,6 @@ enum Msg {
 }
 
 struct Model {
-    value: i64,
     todo: Vec<Todo>,
     fetch: bool,
     url: String,
@@ -42,12 +33,10 @@ impl Component for Model {
     type Message = Msg;
     type Properties = ();
 
-    fn create(ctx: &Context<Self>) -> Model {
+    fn create(_: &Context<Self>) -> Model {
         let todo = vec![];
-        log::info!("todo {:?}", todo);
         let url = String::from("http://localhost:8000");
         Model {
-            value: 0,
             todo,
             fetch: true,
             url,
@@ -58,10 +47,6 @@ impl Component for Model {
         let url = self.url.clone();
         let len = self.todo.len();
         match msg {
-            Msg::AddOne => {
-                self.value += 1;
-                true
-            }
             Msg::AddTodo(data) => {
                 self.todo = data;
                 true
@@ -129,7 +114,6 @@ async fn init(url: String) -> Vec<Todo> {
         .json()
         .await
         .unwrap();
-    log::info!("todo {:?}", result);
     result
 }
 async fn new_todo(url: String) {
@@ -138,18 +122,17 @@ async fn new_todo(url: String) {
     let mut date = String::new();
     if name_js.is_string() {
         name = name_js.as_string().unwrap();
-        log::info!("Name {:?}", name);
     } else {
         return;
     }
     let date_js = prompt("Date : ");
     if date_js.is_string() {
         date = date_js.as_string().unwrap();
-        log::info!("Date: {}", date);
     }
     Request::post(format!("{}/new/{}/{}", url, name, date).as_str())
         .send()
-        .await;
+        .await
+        .unwrap();
 }
 async fn rm_todo(url: String, length: usize) {
     let mut index = 0;
@@ -160,13 +143,13 @@ async fn rm_todo(url: String, length: usize) {
     if index < length {
         Request::post(format!("{}/rm/{}", url, index).as_str())
             .send()
-            .await;
+            .await
+            .unwrap();
     } else {
         alert("Enter valid index number");
     }
 }
 
 fn main() {
-    wasm_logger::init(wasm_logger::Config::default());
     yew::start_app::<Model>();
 }
