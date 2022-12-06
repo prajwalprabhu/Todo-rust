@@ -10,7 +10,7 @@ use rocket::{
     Request, Response,
 };
 use serde_derive::{Deserialize, Serialize};
-use serde_json::to_string;
+use serde_json::to_vec_pretty;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Todo {
@@ -71,7 +71,7 @@ async fn write_json(data: Vec<Todo>) {
         .open("./data.json")
         .await
         .unwrap();
-    f.write(to_string(&data).unwrap().as_bytes()).await.unwrap();
+    f.write(&to_vec_pretty(&data).unwrap()).await.unwrap();
     f.flush().await.unwrap();
 }
 
